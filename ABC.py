@@ -1,5 +1,5 @@
 import numpy as np
-
+import matplotlib.pyplot as plt
 
 class Bee:
     x = None
@@ -8,19 +8,21 @@ class Bee:
 
 
 # ---------------------- CONST ---------------------------
-X = 1000
-Y = 1000
+X = 10
+Y = 10
 TAU = 5
 Tau = TAU
-BeeCount = 100
+BeeCount = 250
 BestBeeCount = 50
 PotentialBeeCount = 30
-MIN = 0
-MAX = 0
-Radius = 3
-AreaCount = 7
+MIN = None
+MAX = None
+Extr = None
+Radius = 1
+AreaCount = 40
 BestAreaCount = 5
 PotentialAreaCount = 2
+Repeat = 0
 
 
 # ---------------------- FUNCTIONS ----------------------------
@@ -39,13 +41,25 @@ def isOnSquare(bee_one, bee_two):
         return False
 
 
+def generate(BeePoint):
+    for i in range(BeeCount):
+        Bees = Bee()
+        Bees.x = np.random.uniform(BeePoint.x - Radius, BeePoint.x + Radius)
+        Bees.y = np.random.uniform(BeePoint.y - Radius, BeePoint.y + Radius)
+        Bees.F = Sphere(Bees.x, Bees.y)
+        Bee_arr.append(Bees)
+
+
+def get_F(Bee):
+    return Bee.F
+
+
 # ---------------------- INIT ----------------------------
 SETKA = np.zeros((X, Y))
 Bee_arr = []
 Areas = []
 BestArea_arr = []
 PotentialArea_arr = []
-ALL = []
 MIN_arr = []
 MAX_arr = []
 
@@ -53,51 +67,59 @@ MAX_arr = []
 # ---------------------------------------------------------
 for i in range(BeeCount):
     Bees = Bee()
-    Bees.x = np.random.randint(0, 20)
-    Bees.y = np.random.randint(0, 20)
+    Bees.x = np.random.uniform(-X, X)
+    Bees.y = np.random.uniform(-Y, Y)
     Bees.F = Sphere(Bees.x, Bees.y)
     Bee_arr.append(Bees)
 
-
-def get_F(Bee):
-    return Bee.F
-
-
 Bee_arr.sort(key=get_F)
+MIN = Bee_arr[0].F
+Extr = Bee_arr[0].F
 
-temp = 0
-rest = Bee_arr
-while (len(rest) > 0):
-    temp += 1
-    newRest = []
-    main_bee = rest[0]
-    newArea = [main_bee]
-    for i in range(1, len(rest)):
-        if isOnSquare(main_bee, rest[i]):
-            newArea.append(rest[i])
-        else:
-            newRest.append(rest[i])
-    rest = newRest
-    Areas.append(newArea)
-    if temp >= AreaCount:
-        break
-
-MIN = Areas[0][0].F
-for i in range(AreaCount):
-    MIN_arr.append(Areas[i][0].F)
-
-while (Tau != 0):
-    if Tau > 0:
-
+while (Tau > 0):
+    if MIN == Extr or Tau > 0:
         Tau -= 1
+        Bee_arr.sort(key=get_F)
+
+        temp = 0
+        rest = Bee_arr
+        while (len(rest) > 0):
+            temp += 1
+            newRest = []
+            main_bee = rest[0]
+            newArea = [main_bee]
+            for i in range(1, len(rest)):
+                if isOnSquare(main_bee, rest[i]):
+                    newArea.append(rest[i])
+                else:
+                    newRest.append(rest[i])
+            rest = newRest
+            Areas.append(newArea)
+            if temp >= AreaCount:
+                break
+        Bee_arr = []
+
+        MIN = Areas[0][0].F
+
+
+        for i in range(len(Areas)):
+            generate(Areas[i][0])
+            # MIN_arr.append(Areas[i][0].F)
+
+        Areas.sort(key= lambda X: X[0].F)
+        Extr = Areas[0][0].F
+
     else:
-        Tau = TAU
+        Tau = 5
 
 
 # ---------------------- OUTPUT ----------------------
 print("Global min: " + str(MIN))
+
 for i in range(len(Areas)):
     print(str(i + 1) + " area")
-    print("min in area: " + str(MIN_arr[i]))
+    # print("min in area: " + str(MIN_arr[i]))
     for j in range(len(Areas[i])):
         printBeeData(Areas[i][j])
+
+print("EXTREMUM : " + str(Extr))
