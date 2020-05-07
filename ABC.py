@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
+
 
 class Bee:
     x = None
@@ -10,16 +10,16 @@ class Bee:
 # ---------------------- CONST ---------------------------
 X = 10
 Y = 10
-TAU = 5
+TAU = 50
 Tau = TAU
-BeeCount = 250
+BeeCount = 50
 BestBeeCount = 50
 PotentialBeeCount = 30
 MIN = None
 MAX = None
 Extr = None
-Radius = 1
-AreaCount = 40
+Radius = 2
+AreaCount = 7
 BestAreaCount = 5
 PotentialAreaCount = 2
 Repeat = 0
@@ -33,13 +33,19 @@ def Sphere(x, y):
 def printBeeData(bee):
     print("x = " + str(bee.x) + "; y = " + str(bee.y) + "; F = " + str(bee.F))
 
+def isOnSquare(bee_one, bee_two):
+    if np.sqrt((bee_one.x - bee_two.x) ** 2 + (bee_one.y - bee_two.y) ** 2) <= Radius:
+        return True
+    else:
+        return False
 
+"""
 def isOnSquare(bee_one, bee_two):
     if abs(bee_one.x - bee_two.x) <= Radius and abs(bee_one.y - bee_two.y) <= Radius:
         return True
     else:
         return False
-
+"""
 
 def generate(BeePoint):
     for i in range(BeeCount):
@@ -115,11 +121,11 @@ while (Tau > 0):
 
 # ---------------------- OUTPUT ----------------------
 print("Global min: " + str(MIN))
-
+"""
 for i in range(len(Areas)):
     print(str(i + 1) + " area")
     # print("min in area: " + str(MIN_arr[i]))
     for j in range(len(Areas[i])):
         printBeeData(Areas[i][j])
-
+"""
 print("EXTREMUM : " + str(Extr))
