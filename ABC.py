@@ -10,7 +10,7 @@ class Bee:
 # ---------------------- CONST ---------------------------
 X = 10
 Y = 10
-TAU = 50
+TAU = 5
 Tau = TAU
 BeeCount = 50
 BestBeeCount = 50
@@ -18,16 +18,32 @@ PotentialBeeCount = 30
 MIN = None
 MAX = None
 Extr = None
-Radius = 2
+Radius = 1
 AreaCount = 7
 BestAreaCount = 5
 PotentialAreaCount = 2
 Repeat = 0
+X_Rastrigin = 5
+Y_Rastrigin = 5
 
 
 # ---------------------- FUNCTIONS ----------------------------
+def Griewank(x, y):
+    return (x**2 + y**2)/4000 - ((np.cos(x)) * (np.cos(y / np.sqrt(2)))) + 1
+
+def Ackley(x, individual):
+    return 20 - 20 * np.exp(-0.2 * np.sqrt(1.0 / N * sum(x ** 2 for x in individual))) + np.e - np.exp(1.0 / N * sum(np.cos(2 * np.pi * x) for x in individual))
+
+def Rosenbrock(x, y):
+        return 100 * (y - x**22)**2 + (x - 1) ** 2
+
+def Rastrigin(x, y):
+    return x**2 - 10 * np.cos(2*np.pi*(x)) + 10 + y**2 - 10 * np.cos(2*np.pi*(y)) + 10
+
+
 def Sphere(x, y):
-    return x ** 2 + y ** 2
+    return x**2 + y**2
+
 
 
 def printBeeData(bee):
@@ -47,6 +63,7 @@ def isOnSquare(bee_one, bee_two):
         return False
 """
 
+
 def generate(BeePoint):
     for i in range(BeeCount):
         Bees = Bee()
@@ -61,7 +78,6 @@ def get_F(Bee):
 
 
 # ---------------------- INIT ----------------------------
-SETKA = np.zeros((X, Y))
 Bee_arr = []
 Areas = []
 BestArea_arr = []
@@ -73,18 +89,20 @@ MAX_arr = []
 # ---------------------------------------------------------
 for i in range(BeeCount):
     Bees = Bee()
-    Bees.x = np.random.uniform(-X, X)
-    Bees.y = np.random.uniform(-Y, Y)
+    Bees.x = np.random.uniform(-X_Rastrigin, X_Rastrigin)
+    Bees.y = np.random.uniform(-Y_Rastrigin, Y_Rastrigin)
     Bees.F = Sphere(Bees.x, Bees.y)
     Bee_arr.append(Bees)
+
+# reverse = True
 
 Bee_arr.sort(key=get_F)
 MIN = Bee_arr[0].F
 Extr = Bee_arr[0].F
+count = 1
 
 while (Tau > 0):
-    if MIN == Extr or Tau > 0:
-        Tau -= 1
+        count += 1
         Bee_arr.sort(key=get_F)
 
         temp = 0
@@ -105,6 +123,16 @@ while (Tau > 0):
                 break
         Bee_arr = []
 
+        if (MIN == Areas[0][0].F):
+            Tau -= 1
+            if Radius == 0.1:
+                Radius = 0.1
+            else:
+                Radius -= 0.3
+        else:
+            Radius = 1
+            Tau = 5
+
         MIN = Areas[0][0].F
 
 
@@ -115,17 +143,18 @@ while (Tau > 0):
         Areas.sort(key= lambda X: X[0].F)
         Extr = Areas[0][0].F
 
-    else:
-        Tau = 5
+
+
 
 
 # ---------------------- OUTPUT ----------------------
 print("Global min: " + str(MIN))
-"""
+
 for i in range(len(Areas)):
     print(str(i + 1) + " area")
     # print("min in area: " + str(MIN_arr[i]))
     for j in range(len(Areas[i])):
         printBeeData(Areas[i][j])
-"""
+
 print("EXTREMUM : " + str(Extr))
+print("COUNT : " + str(count))

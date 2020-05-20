@@ -7,8 +7,7 @@ X = np.linspace(-5.12, 5.12, 100)
 Y = np.linspace(-5.12, 5.12, 100)     
 X, Y = np.meshgrid(X, Y) 
 
-Z = (X**2 - 10 * np.cos(2 * np.pi * X)) + \
-  (Y**2 - 10 * np.cos(2 * np.pi * Y)) + 20
+Z = (X**2 - 10 * np.cos(2 * np.pi * X)) + (Y**2 - 10 * np.cos(2 * np.pi * Y)) + 20
  
 fig = plt.figure() 
 ax = fig.gca(projection='3d') 
