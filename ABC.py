@@ -12,7 +12,7 @@ X = 10
 Y = 10
 TAU = 5
 Tau = TAU
-BeeCount = 50
+BeeCount = 1
 BestBeeCount = 50
 PotentialBeeCount = 30
 MIN = None
@@ -32,17 +32,17 @@ def Griewank(x, y):
     return (x**2 + y**2)/4000 - ((np.cos(x)) * (np.cos(y / np.sqrt(2)))) + 1
 
 def Ackley(x, individual):
-    return 20 - 20 * np.exp(-0.2 * np.sqrt(1.0 / N * sum(x ** 2 for x in individual))) + np.e - np.exp(1.0 / N * sum(np.cos(2 * np.pi * x) for x in individual))
+    return 20 - 20 * np.exp(-0.2 * np.sqrt(1.0 / 2 * sum(x ** 2 for x in individual))) + np.e - np.exp(1.0 / 2 * sum(np.cos(2 * np.pi * x) for x in individual))
 
 def Rosenbrock(x, y):
-        return 100 * (y - x**22)**2 + (x - 1) ** 2
+        return 100 * (y - x**2)**2 + (x - 1) ** 2
 
 def Rastrigin(x, y):
     return x**2 - 10 * np.cos(2*np.pi*(x)) + 10 + y**2 - 10 * np.cos(2*np.pi*(y)) + 10
 
 
 def Sphere(x, y):
-    return x**2 + y**2
+    return 100 * (y - x**2)**2 + (x - 1) ** 2
 
 
 
@@ -148,13 +148,11 @@ while (Tau > 0):
 
 
 # ---------------------- OUTPUT ----------------------
-print("Global min: " + str(MIN))
-
-for i in range(len(Areas)):
+"""for i in range(len(Areas)):
     print(str(i + 1) + " area")
     # print("min in area: " + str(MIN_arr[i]))
     for j in range(len(Areas[i])):
         printBeeData(Areas[i][j])
-
+"""
 print("EXTREMUM : " + str(Extr))
 print("COUNT : " + str(count))
