@@ -140,8 +140,8 @@ while (Tau > 0):
     MIN = Areas[0][0].F
 
 
-    for i in range(len(Areas)):
-        generate(Areas[i][0])
+    for i in range(len(newIteration)):
+        generate(newIteration[i][0])
         # MIN_arr.append(Areas[i][0].F)
 
     Areas.sort(key= lambda X: X[0].F)
@@ -161,7 +161,7 @@ x = []
 y = []
 
 iter_num = len(Iterations)
-iter_show_num = 5
+iter_show_num = iter_num
 
 for i in range(0, iter_num, int(iter_num / iter_show_num)):
 
